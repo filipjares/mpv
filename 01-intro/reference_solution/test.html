@@ -1,0 +1,229 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>test</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-02-16"><meta name="DC.source" content="test.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="test.html#2">G = gauss(x,sigma)</a></li><li><a href="test.html#3">D = dgauss(x,sigma)</a></li><li><a href="test.html#4">out = gaussfilter(in, sigma)</a></li><li><a href="test.html#5">[gx, gy] = gaussderiv(in, sigma)</a></li><li><a href="test.html#6">[gxx, gxy, gyy] = gaussderiv2(in, sigma)</a></li><li><a href="test.html#7">A = affine(x1,y1,x2,y2,x3,y3)</a></li><li><a href="test.html#8">out = affinetr(in, A, ps, ext)</a></li><li><a href="test.html#9">out = affinetr(in, A, ps, ext)</a></li></ul></div><pre class="codeinput"><span class="comment">% Testovaci skript</span>
+</pre><h2>G = gauss(x,sigma)<a name="2"></a></h2><pre class="codeinput">sigma = 6.0;
+x = -ceil(3.0*sigma):ceil(3.0*sigma);
+G = gauss(x, sigma);
+
+figure;
+plot(x, G, x, G, <span class="string">'rx'</span>); grid <span class="string">on</span>;
+title(<span class="string">'Gaussian, sigma 6.0'</span>);
+</pre><img vspace="5" hspace="5" src="test_01.png" alt=""> <h2>D = dgauss(x,sigma)<a name="3"></a></h2><pre class="codeinput">D = dgauss(x, sigma);
+figure;
+plot(x, D, x, D, <span class="string">'rx'</span>); grid <span class="string">on</span>;
+title(<span class="string">'Derivace gaussianu, sigma 6.0'</span>);
+</pre><img vspace="5" hspace="5" src="test_02.png" alt=""> <h2>out = gaussfilter(in, sigma)<a name="4"></a></h2><pre class="codeinput">in = im2double(imread(<span class="string">'cameraman.tif'</span>));
+Ifiltr = gaussfilter(in, sigma);
+
+figure;
+
+subplot(1,2,1)
+imagesc(in), title(<span class="string">'Vstupni obraz'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>;
+
+subplot(1,2,2)
+imagesc(Ifiltr), title(<span class="string">'Vystupni obraz'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>;
+</pre><img vspace="5" hspace="5" src="test_03.png" alt=""> <h2>[gx, gy] = gaussderiv(in, sigma)<a name="5"></a></h2><pre class="codeinput">[gx, gy] = gaussderiv(in, sigma);
+
+figure;
+subplot(1,2,1); imagesc(gx), title(<span class="string">'Vystupni obraz gx'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>;
+subplot(1,2,2); imagesc(gy), title(<span class="string">'Vystupni obraz gy'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>;
+
+fprintf(1, <span class="string">'%10.7f '</span>, [gx(143,115), gx(138,128), gx(56, 104) gx(30,220) gx(182,65)]); fprintf(1,<span class="string">'\n'</span>);
+fprintf(1, <span class="string">'%10.7f '</span>, [gy(143,115), gy(138,128), gy(56, 104) gy(30,220) gy(182,65)]); fprintf(1,<span class="string">'\n'</span>);
+</pre><pre class="codeoutput"> 0.0049746  0.0167381 -0.0157075 -0.0012058  0.0002339 
+ 0.0131340  0.0133353 -0.0005066 -0.0003413  0.0000889 
+</pre><img vspace="5" hspace="5" src="test_04.png" alt=""> <h2>[gxx, gxy, gyy] = gaussderiv2(in, sigma)<a name="6"></a></h2><pre class="codeinput">[gxx, gxy, gyy] = gaussderiv2_f(in, sigma);
+
+figure;
+
+subplot(2,2,1); imagesc(in), title(<span class="string">'Vstupni obraz'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>;
+subplot(2,2,2); imagesc(gxx(6:end-5,6:end-5)), title(<span class="string">'Vystupni obraz gxx'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>;
+subplot(2,2,3); imagesc(gxy(6:end-5,6:end-5)), title(<span class="string">'Vystupni obraz gxy'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>;
+subplot(2,2,4); imagesc(gyy(6:end-5,6:end-5)), title(<span class="string">'Vystupni obraz gyy'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>;
+
+fprintf(1, <span class="string">'%10.7f '</span>, [gxx(143,115), gxx(138,128), gxx(56, 104) gxx(30,220) gxx(182,65)]); fprintf(1,<span class="string">'\n'</span>);
+fprintf(1, <span class="string">'%10.7f '</span>, [gxy(143,115), gxy(138,128), gxy(56, 104) gxy(30,220) gxy(182,65)]); fprintf(1,<span class="string">'\n'</span>);
+fprintf(1, <span class="string">'%10.7f '</span>, [gyy(143,115), gyy(138,128), gyy(56, 104) gyy(30,220) gyy(182,65)]); fprintf(1,<span class="string">'\n'</span>);
+</pre><pre class="codeoutput">-0.0053156  0.0036032  0.0043710  0.0000462 -0.0000603 
+-0.0009787 -0.0005705  0.0026119 -0.0000253 -0.0000041 
+-0.0014286 -0.0005183  0.0013821  0.0000390  0.0000096 
+</pre><img vspace="5" hspace="5" src="test_05.png" alt=""> <h2>A = affine(x1,y1,x2,y2,x3,y3)<a name="7"></a></h2><pre class="codeinput">x1 = 120; x3 = 115; x2 = 135;
+y1 = 100; y3 = 90;  y2 = 95;
+
+A = affine(x1,y1,x2,y2,x3,y3)
+</pre><pre class="codeoutput">
+A =
+
+    15    -5   120
+    -5   -10   100
+     0     0     1
+
+</pre><h2>out = affinetr(in, A, ps, ext)<a name="8"></a></h2><pre class="codeinput">tic; out = affinetr(in,A,61,3); toc
+
+figure; imagesc(in), title(<span class="string">'Vstupni obraz'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>; hold <span class="string">on</span>;
+<span class="comment">% +1 for matlab indexing</span>
+X=[-3 -3 3 3 -3; -3 3 3 -3 -3]; X(3,:)=1; Xt=A*X+1;
+p.linewidth=2; line(Xt(1,:),Xt(2,:),p); plot([x1 x2]+1, [y1 y2]+1,<span class="string">'r'</span>,p); plot([x1 x3]+1, [y1 y3]+1,<span class="string">'g'</span>, p);
+
+figure; imagesc(out), title(<span class="string">'Vyrez obrazu'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>; axis <span class="string">xy</span>; hold <span class="string">on</span>;
+plot([0 1]*61/6+31, [0 0]*61/6+31,<span class="string">'r'</span>, p); plot([0 0]*61/6+31, [0 1]*61/6+31,<span class="string">'g'</span>, p);
+</pre><pre class="codeoutput">Elapsed time is 0.109927 seconds.
+</pre><img vspace="5" hspace="5" src="test_06.png" alt=""> <img vspace="5" hspace="5" src="test_07.png" alt=""> <h2>out = affinetr(in, A, ps, ext)<a name="9"></a></h2><pre class="codeinput">tic; out = affinetr(in,A,61,1); toc
+
+figure; imagesc(in), title(<span class="string">'Vstupni obraz'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>; hold <span class="string">on</span>;
+<span class="comment">% +1 for MATLAB indexing</span>
+X=[-1 -1 1 1 -1; -1 1 1 -1 -1]; X(3,:)=1; Xt=A*X+1;
+line(Xt(1,:),Xt(2,:),<span class="string">'color'</span>,<span class="string">'y'</span>, p); plot([x1 x2]+1, [y1 y2]+1,<span class="string">'r'</span>,p); plot([x1 x3]+1, [y1 y3]+1,<span class="string">'g'</span>, p);
+
+figure; imagesc(out), title(<span class="string">'Vyrez obrazu'</span>); colormap <span class="string">gray</span>; axis <span class="string">image</span>; axis <span class="string">xy</span>; hold <span class="string">on</span>;
+plot([0 1]*61/2+31, [0 0]*61/2+31,<span class="string">'r'</span>, p); plot([0 0]*61/2+31, [0 1]*61/2+31,<span class="string">'g'</span>, p);
+</pre><pre class="codeoutput">Elapsed time is 0.024511 seconds.
+</pre><img vspace="5" hspace="5" src="test_08.png" alt=""> <img vspace="5" hspace="5" src="test_09.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+% Testovaci skript
+%% G = gauss(x,sigma)
+sigma = 6.0;
+x = -ceil(3.0*sigma):ceil(3.0*sigma);
+G = gauss(x, sigma);
+
+figure;
+plot(x, G, x, G, 'rx'); grid on;
+title('Gaussian, sigma 6.0');
+
+%% D = dgauss(x,sigma)
+
+D = dgauss(x, sigma);
+figure;
+plot(x, D, x, D, 'rx'); grid on;
+title('Derivace gaussianu, sigma 6.0');
+
+%% out = gaussfilter(in, sigma) 
+in = im2double(imread('cameraman.tif'));
+Ifiltr = gaussfilter(in, sigma);
+
+figure;
+
+subplot(1,2,1)
+imagesc(in), title('Vstupni obraz'); colormap gray; axis image;
+
+subplot(1,2,2)
+imagesc(Ifiltr), title('Vystupni obraz'); colormap gray; axis image;
+
+%% [gx, gy] = gaussderiv(in, sigma)
+[gx, gy] = gaussderiv(in, sigma);
+
+figure;
+subplot(1,2,1); imagesc(gx), title('Vystupni obraz gx'); colormap gray; axis image;
+subplot(1,2,2); imagesc(gy), title('Vystupni obraz gy'); colormap gray; axis image;
+
+fprintf(1, '%10.7f ', [gx(143,115), gx(138,128), gx(56, 104) gx(30,220) gx(182,65)]); fprintf(1,'\n');
+fprintf(1, '%10.7f ', [gy(143,115), gy(138,128), gy(56, 104) gy(30,220) gy(182,65)]); fprintf(1,'\n');
+
+%% [gxx, gxy, gyy] = gaussderiv2(in, sigma)
+[gxx, gxy, gyy] = gaussderiv2_f(in, sigma);
+
+figure;
+
+subplot(2,2,1); imagesc(in), title('Vstupni obraz'); colormap gray; axis image;
+subplot(2,2,2); imagesc(gxx(6:end-5,6:end-5)), title('Vystupni obraz gxx'); colormap gray; axis image;
+subplot(2,2,3); imagesc(gxy(6:end-5,6:end-5)), title('Vystupni obraz gxy'); colormap gray; axis image;
+subplot(2,2,4); imagesc(gyy(6:end-5,6:end-5)), title('Vystupni obraz gyy'); colormap gray; axis image;
+
+fprintf(1, '%10.7f ', [gxx(143,115), gxx(138,128), gxx(56, 104) gxx(30,220) gxx(182,65)]); fprintf(1,'\n');
+fprintf(1, '%10.7f ', [gxy(143,115), gxy(138,128), gxy(56, 104) gxy(30,220) gxy(182,65)]); fprintf(1,'\n');
+fprintf(1, '%10.7f ', [gyy(143,115), gyy(138,128), gyy(56, 104) gyy(30,220) gyy(182,65)]); fprintf(1,'\n');
+
+%% A = affine(x1,y1,x2,y2,x3,y3)
+x1 = 120; x3 = 115; x2 = 135;
+y1 = 100; y3 = 90;  y2 = 95;
+
+A = affine(x1,y1,x2,y2,x3,y3)
+
+%% out = affinetr(in, A, ps, ext)
+tic; out = affinetr(in,A,61,3); toc
+
+figure; imagesc(in), title('Vstupni obraz'); colormap gray; axis image; hold on;
+% +1 for matlab indexing
+X=[-3 -3 3 3 -3; -3 3 3 -3 -3]; X(3,:)=1; Xt=A*X+1;
+p.linewidth=2; line(Xt(1,:),Xt(2,:),p); plot([x1 x2]+1, [y1 y2]+1,'r',p); plot([x1 x3]+1, [y1 y3]+1,'g', p);
+ 
+figure; imagesc(out), title('Vyrez obrazu'); colormap gray; axis image; axis xy; hold on; 
+plot([0 1]*61/6+31, [0 0]*61/6+31,'r', p); plot([0 0]*61/6+31, [0 1]*61/6+31,'g', p);
+
+%% out = affinetr(in, A, ps, ext)
+tic; out = affinetr(in,A,61,1); toc
+
+figure; imagesc(in), title('Vstupni obraz'); colormap gray; axis image; hold on;
+% +1 for MATLAB indexing
+X=[-1 -1 1 1 -1; -1 1 1 -1 -1]; X(3,:)=1; Xt=A*X+1;
+line(Xt(1,:),Xt(2,:),'color','y', p); plot([x1 x2]+1, [y1 y2]+1,'r',p); plot([x1 x3]+1, [y1 y3]+1,'g', p);
+ 
+figure; imagesc(out), title('Vyrez obrazu'); colormap gray; axis image; axis xy; hold on; 
+plot([0 1]*61/2+31, [0 0]*61/2+31,'r', p); plot([0 0]*61/2+31, [0 1]*61/2+31,'g', p);
+
+
+##### SOURCE END #####
+--></body></html>

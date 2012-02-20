@@ -1,0 +1,13 @@
+function A = affine(x1,y1,x2,y2,x3,y3)
+
+    % A is 3x3 matrix such that
+    %
+    % A * [ [0 0 1]' [1 0 1]' [0 1 1]' ] == [ [x1 y1 1]' [x2 y2 1]' [x3 y3 1]'
+
+    A = [ ...
+            x2 - x1,    x3 - x1,    x1; ...
+            y2 - y1,    y3 - y1,    y1; ...
+            0,          0,          1   ...
+        ];    
+    
+end
