@@ -16,17 +16,15 @@ function [dx,dy] = gaussderiv(in,sigma)
     dx = conv2(in, kernX, 'same');
     dy = conv2(in, kernY, 'same');
 
-% jina varianta: dava to ale opacne znamenko, nevim proc
+% Another alternative, it however yields opposite sign. Did not know why.
+% But the answer is something like: by convention the sign used for
+% convolution and filtering is not always the same, have to look it up
 %
 %     out = gaussfilter(in, sigma);
 %     
-%     kern = [-1 0 1]/2;
+%     kern = [-1 0 1]/2;	% FIXME: change the sign
 %     
 %     dx = conv2(out, kern, 'same');
 %     dy = conv2(out, kern', 'same');
-
-% NOTE
-%
-% Convolution is computed in different orientation
 
 end
