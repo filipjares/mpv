@@ -20,11 +20,11 @@ figure(3);
 surf(out);          % or
 
 figure(4);
-img = imread('../lenna.png');
-imagesc(img(:,:,1));
+in = im2double(imread('images/cameraman.tif'));
+imagesc(in(:,:,1));
 colormap('gray');
 figure(5);
-img_f = conv2(double(out), double(img(:,:,1)));
+img_f = conv2(double(out), double(in(:,:,1)));
 imagesc(img_f);
 colormap('gray');
 
