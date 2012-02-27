@@ -25,4 +25,8 @@ function [dx,dy] = gaussderiv(in,sigma)
 %     dx = conv2(out, kern, 'same');
 %     dy = conv2(out, kern', 'same');
 
+% NOTE
+%
+% Convolution is computed in different orientation
+
 end
